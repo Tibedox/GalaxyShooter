@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("Galaxy Shooter");
+		config.setWindowedMode((int)GalaxyShooter.SCR_WIDTH, (int)GalaxyShooter.SCR_HEIGHT);
 		new Lwjgl3Application(new GalaxyShooter(), config);
 	}
 }
