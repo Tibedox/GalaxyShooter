@@ -42,7 +42,7 @@ public class GalaxyShooter extends Game {
 		screenSettings = new ScreenSettings(this);
 		screenAbout = new ScreenAbout(this);
 
-		setScreen(screenAbout);
+		setScreen(screenIntro);
 	}
 
 	void createFont(){
