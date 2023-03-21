@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class InputKeyboard {
     private final String nameOfFont = "ubuntumono.ttf";
     private final String nameOfImgKeys = "keys.png";
+    private final int fontSize = 30;
 
     private boolean endOfEdit;
 
@@ -179,7 +180,8 @@ public class InputKeyboard {
     }
 
     // окончание редактирования ввода (нажата кнопка enter)
-    public boolean endOfEdit(){
+    public boolean endOfEdit(float tx, float ty){
+        hit(tx, ty);
         if(!endOfEdit) return false;
         endOfEdit = false;
         return true;
@@ -219,7 +221,7 @@ public class InputKeyboard {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(nameOfFont));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.color = new Color(1, 1, 1, 1);
-        parameter.size = 50;
+        parameter.size = fontSize;
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 1;
         parameter.borderStraight = true;
