@@ -4,8 +4,10 @@ import static ru.myitschool.galaxyshooter.GalaxyShooter.SCR_HEIGHT;
 import static ru.myitschool.galaxyshooter.GalaxyShooter.SCR_WIDTH;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class ScreenSettings implements Screen {
     GalaxyShooter gs;
@@ -31,11 +33,11 @@ public class ScreenSettings implements Screen {
         btnMusic = new TextButton(gs.font, "Music on", 100, 500);
         btnClearTable = new TextButton(gs.font, "Clear records", 100, 400);
         btnBack = new TextButton(gs.font, "Back", 100, 100);
+        loadSettings();
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ScreenSettings implements Screen {
                 if(keyboard.endOfEdit(gs.touch.x, gs.touch.y)){
                     isEnterName = false;
                     gs.playerName = keyboard.getText();
-                    btnName.text = "Name: "+gs.playerName;
+                    updateButtons();
                 }
             } else {
                 if (btnName.hit(gs.touch.x, gs.touch.y)) {
@@ -56,26 +58,19 @@ public class ScreenSettings implements Screen {
                 }
                 if (btnSound.hit(gs.touch.x, gs.touch.y)) {
                     gs.sound = !gs.sound;
-                    if (gs.sound) {
-                        btnSound.text = "Sound on";
-                    } else {
-                        btnSound.text = "Sound off";
-                    }
+                    updateButtons();
                 }
                 if (btnMusic.hit(gs.touch.x, gs.touch.y)) {
                     gs.music = !gs.music;
-                    if (gs.music) {
-                        btnMusic.text = "Music on";
-                    } else {
-                        btnMusic.text = "Music off";
-                    }
+                    updateButtons();
                 }
                 if (btnClearTable.hit(gs.touch.x, gs.touch.y)) {
-                    btnClearTable.text = "Records cleared";
+                    btnClearTable.setText("Records cleared");
                 }
                 if (btnBack.hit(gs.touch.x, gs.touch.y)) {
                     gs.setScreen(gs.screenIntro);
-                    btnClearTable.text = "Clear records";
+                    saveSettings();
+                    btnClearTable.setText("Clear records");
                 }
             }
         }
@@ -123,5 +118,35 @@ public class ScreenSettings implements Screen {
     public void dispose() {
         imgBackGround.dispose();
         keyboard.dispose();
+    }
+
+    void saveSettings() {
+        Preferences pref = Gdx.app.getPreferences("GalaxyShooterSettings");
+        pref.putString("Name", gs.playerName);
+        pref.putBoolean("Sound", gs.sound);
+        pref.putBoolean("Music", gs.music);
+        pref.flush();
+    }
+
+    void loadSettings() {
+        Preferences pref = Gdx.app.getPreferences("GalaxyShooterSettings");
+        if(pref.contains("Name")) gs.playerName = pref.getString("Name");
+        if(pref.contains("Sound")) gs.sound = pref.getBoolean("Sound");
+        if(pref.contains("Music")) gs.music = pref.getBoolean("Music");
+        updateButtons();
+    }
+
+    void updateButtons() {
+        btnName.setText("Name: "+gs.playerName);
+        if (gs.sound) {
+            btnSound.setText("Sound on");
+        } else {
+            btnSound.setText("Sound off");
+        }
+        if (gs.music) {
+            btnMusic.setText("Music on");
+        } else {
+            btnMusic.setText("Music off");
+        }
     }
 }
