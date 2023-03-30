@@ -38,12 +38,19 @@ public class ScreenGame implements Screen {
         if(Gdx.input.justTouched()){
             gs.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             gs.camera.unproject(gs.touch);
+            if(gs.touch.x < ship.x){
+                ship.vx = -1;
+            }
+            if(gs.touch.x > ship.x){
+                ship.vx = 1;
+            }
         }
 
         // события игры
         for (int i = 0; i < sky.length; i++) {
             sky[i].move();
         }
+        ship.move();
 
         // вывод изображений
         gs.camera.update();
@@ -52,7 +59,7 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < sky.length; i++) {
             gs.batch.draw(imgSpaceSky, sky[i].x, sky[i].y, sky[i].width, sky[i].height);
         }
-        gs.batch.draw(imgShip, ship.x, ship.y, ship.width, ship.height);
+        gs.batch.draw(imgShip, ship.getX(), ship.getY(), ship.width, ship.height);
         gs.batch.end();
     }
 
