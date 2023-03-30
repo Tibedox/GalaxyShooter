@@ -11,16 +11,20 @@ public class ScreenGame implements Screen {
     GalaxyShooter gs;
 
     Texture imgSpaceSky;
+    Texture imgShip;
 
     SpaceSky[] sky = new SpaceSky[2];
+    SpaceShip ship;
 
     public ScreenGame(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
 
-        imgSpaceSky = new Texture("gifcosmos.png");
+        imgSpaceSky = new Texture("stars.png");
+        imgShip = new Texture("ship.png");
 
         sky[0] = new SpaceSky(0);
         sky[1] = new SpaceSky(SCR_HEIGHT);
+        ship = new SpaceShip(SCR_WIDTH/2, 100, 100, 100);
     }
 
     @Override
@@ -48,7 +52,7 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < sky.length; i++) {
             gs.batch.draw(imgSpaceSky, sky[i].x, sky[i].y, sky[i].width, sky[i].height);
         }
-
+        gs.batch.draw(imgShip, ship.x, ship.y, ship.width, ship.height);
         gs.batch.end();
     }
 
@@ -74,6 +78,7 @@ public class ScreenGame implements Screen {
 
     @Override
     public void dispose() {
-
+        imgSpaceSky.dispose();
+        imgShip.dispose();
     }
 }
