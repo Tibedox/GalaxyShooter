@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.ArrayList;
+
 public class ScreenGame implements Screen {
     GalaxyShooter gs;
 
@@ -16,7 +18,7 @@ public class ScreenGame implements Screen {
 
     SpaceSky[] sky = new SpaceSky[2];
     SpaceShip ship;
-    EnemyShip enemy;
+    ArrayList<EnemyShip> enemy = new ArrayList<>();
 
     public ScreenGame(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
@@ -28,7 +30,9 @@ public class ScreenGame implements Screen {
         sky[0] = new SpaceSky(0);
         sky[1] = new SpaceSky(SCR_HEIGHT);
         ship = new SpaceShip(SCR_WIDTH/2, 100, 100, 100);
-        enemy = new EnemyShip(120, 120);
+        for (int i = 0; i < 10; i++) {
+            enemy.add(new EnemyShip(120, 120));
+        }
     }
 
     @Override
@@ -49,7 +53,11 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < sky.length; i++) {
             sky[i].move();
         }
-        enemy.move();
+
+        for (int i = 0; i < enemy.size(); i++) {
+            enemy.get(i).move();
+        }
+
         ship.move();
 
         // вывод изображений
@@ -59,7 +67,9 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < sky.length; i++) {
             gs.batch.draw(imgSpaceSky, sky[i].x, sky[i].y, sky[i].width, sky[i].height);
         }
-        gs.batch.draw(imgEnemy, enemy.getX(), enemy.getY(), enemy.width, enemy.height);
+        for (int i = 0; i < enemy.size(); i++) {
+            gs.batch.draw(imgEnemy, enemy.get(i).getX(), enemy.get(i).getY(), enemy.get(i).width, enemy.get(i).height);
+        }
         gs.batch.draw(imgShip, ship.getX(), ship.getY(), ship.width, ship.height);
         gs.batch.end();
     }
