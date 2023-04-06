@@ -6,6 +6,7 @@ import static ru.myitschool.galaxyshooter.GalaxyShooter.SCR_WIDTH;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,8 @@ public class ScreenGame implements Screen {
     SpaceShip ship;
     ArrayList<EnemyShip> enemy = new ArrayList<>();
 
+    long timeEnemySpawn, timeEnemyInterval = 1500;
+
     public ScreenGame(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
 
@@ -30,9 +33,6 @@ public class ScreenGame implements Screen {
         sky[0] = new SpaceSky(0);
         sky[1] = new SpaceSky(SCR_HEIGHT);
         ship = new SpaceShip(SCR_WIDTH/2, 100, 100, 100);
-        for (int i = 0; i < 10; i++) {
-            enemy.add(new EnemyShip(120, 120));
-        }
     }
 
     @Override
@@ -54,6 +54,7 @@ public class ScreenGame implements Screen {
             sky[i].move();
         }
 
+        spawnEnemy();
         for (int i = 0; i < enemy.size(); i++) {
             enemy.get(i).move();
         }
@@ -98,5 +99,12 @@ public class ScreenGame implements Screen {
     public void dispose() {
         imgSpaceSky.dispose();
         imgShip.dispose();
+    }
+
+    void spawnEnemy() {
+        if(timeEnemySpawn+timeEnemyInterval < TimeUtils.millis()) {
+            enemy.add(new EnemyShip(100, 100));
+            timeEnemySpawn = TimeUtils.millis();
+        }
     }
 }

@@ -10,7 +10,7 @@ public class EnemyShip extends GalaxyObject{
         super(0, 0, width, height);
         x = MathUtils.random(0+width/2, SCR_WIDTH-width/2);
         y = MathUtils.random(SCR_HEIGHT+height/2, SCR_HEIGHT*2);
-        vy = MathUtils.random(-5, -2);
+        vy = MathUtils.random(-5f, -2);
     }
 
     @Override
