@@ -16,12 +16,15 @@ public class ScreenGame implements Screen {
     Texture imgSpaceSky;
     Texture imgShip;
     Texture imgEnemy;
+    Texture imgShot;
 
     SpaceSky[] sky = new SpaceSky[2];
     SpaceShip ship;
     ArrayList<EnemyShip> enemy = new ArrayList<>();
+    ArrayList<ShipShot> shots = new ArrayList<>();
 
     long timeEnemySpawn, timeEnemyInterval = 1500;
+    long timeShotSpawn, timeShotInterval = 500;
 
     public ScreenGame(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
@@ -29,6 +32,7 @@ public class ScreenGame implements Screen {
         imgSpaceSky = new Texture("stars.png");
         imgShip = new Texture("ship.png");
         imgEnemy = new Texture("enemy.png");
+        imgShot = new Texture("shipshot.png");
 
         sky[0] = new SpaceSky(0);
         sky[1] = new SpaceSky(SCR_HEIGHT);
@@ -59,6 +63,11 @@ public class ScreenGame implements Screen {
             enemy.get(i).move();
         }
 
+        spawnShots();
+        for (int i = 0; i < shots.size(); i++) {
+            shots.get(i).move();
+        }
+
         ship.move();
 
         // вывод изображений
@@ -70,6 +79,9 @@ public class ScreenGame implements Screen {
         }
         for (int i = 0; i < enemy.size(); i++) {
             gs.batch.draw(imgEnemy, enemy.get(i).getX(), enemy.get(i).getY(), enemy.get(i).width, enemy.get(i).height);
+        }
+        for (int i = 0; i < shots.size(); i++) {
+            gs.batch.draw(imgShot, shots.get(i).getX(), shots.get(i).getY(), shots.get(i).width, shots.get(i).height);
         }
         gs.batch.draw(imgShip, ship.getX(), ship.getY(), ship.width, ship.height);
         gs.batch.end();
@@ -99,12 +111,21 @@ public class ScreenGame implements Screen {
     public void dispose() {
         imgSpaceSky.dispose();
         imgShip.dispose();
+        imgEnemy.dispose();
+        imgShot.dispose();
     }
 
     void spawnEnemy() {
         if(timeEnemySpawn+timeEnemyInterval < TimeUtils.millis()) {
             enemy.add(new EnemyShip(100, 100));
             timeEnemySpawn = TimeUtils.millis();
+        }
+    }
+
+    void spawnShots() {
+        if(timeShotSpawn+timeShotInterval < TimeUtils.millis()) {
+            shots.add(new ShipShot(ship.x, ship.y, ship.width, ship.height));
+            timeShotSpawn = TimeUtils.millis();
         }
     }
 }
