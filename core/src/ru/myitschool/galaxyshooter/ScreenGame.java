@@ -5,6 +5,7 @@ import static ru.myitschool.galaxyshooter.GalaxyShooter.SCR_WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -17,6 +18,8 @@ public class ScreenGame implements Screen {
     Texture imgShip;
     Texture imgEnemy;
     Texture imgShot;
+    Sound sndShoot;
+    Sound sndExposion;
 
     SpaceSky[] sky = new SpaceSky[2];
     SpaceShip ship;
@@ -33,6 +36,8 @@ public class ScreenGame implements Screen {
         imgShip = new Texture("ship.png");
         imgEnemy = new Texture("enemy.png");
         imgShot = new Texture("shipshot.png");
+        sndShoot = Gdx.audio.newSound(Gdx.files.internal("shoot.mp3"));
+        sndExposion = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
 
         sky[0] = new SpaceSky(0);
         sky[1] = new SpaceSky(SCR_HEIGHT);
@@ -79,6 +84,7 @@ public class ScreenGame implements Screen {
                 if(shots.get(i).overlap(enemy.get(j))) {
                     shots.remove(i);
                     enemy.remove(j);
+                    if(gs.sound) sndExposion.play();
                     break;
                 }
             }
@@ -142,6 +148,9 @@ public class ScreenGame implements Screen {
         if(timeShotSpawn+timeShotInterval < TimeUtils.millis()) {
             shots.add(new ShipShot(ship.x, ship.y, ship.width, ship.height));
             timeShotSpawn = TimeUtils.millis();
+            if(gs.sound) {
+                sndShoot.play();
+            }
         }
     }
 }
