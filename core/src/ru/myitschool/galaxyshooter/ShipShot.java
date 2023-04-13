@@ -1,5 +1,7 @@
 package ru.myitschool.galaxyshooter;
 
+import static ru.myitschool.galaxyshooter.GalaxyShooter.SCR_HEIGHT;
+
 public class ShipShot extends GalaxyObject{
     public ShipShot(float x, float y, float width, float height) {
         super(x, y, width, height);
@@ -13,6 +15,10 @@ public class ShipShot extends GalaxyObject{
     }
 
     boolean outOfScreen() {
-       return y > height/2;
+       return y > SCR_HEIGHT + height/2;
+    }
+
+    boolean overlap(EnemyShip enemy) {
+        return Math.abs(x-enemy.x)<width/2+enemy.width/2 & Math.abs(y-enemy.y)<height/2+enemy.height/2;
     }
 }
