@@ -13,12 +13,6 @@ public class EnemyShip extends GalaxyObject{
         vy = MathUtils.random(-5f, -2f);
     }
 
-    @Override
-    void move() {
-        super.move();
-        outOfScreen();
-    }
-
     boolean outOfScreen() {
        return y < - height/2;
     }
