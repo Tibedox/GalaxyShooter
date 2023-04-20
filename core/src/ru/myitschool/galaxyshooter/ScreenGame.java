@@ -90,7 +90,7 @@ public class ScreenGame implements Screen {
             for (int j = 0; j < enemy.size(); j++) {
                 if(shots.get(i).overlap(enemy.get(j))) {
                     // взрыв вражеского корабля
-                    for (int k = 0; k < 1400; k++) {
+                    for (int k = 0; k < 100; k++) {
                         fragments.add(new FragmentShip(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width));
                     }
                     shots.remove(i);
@@ -120,7 +120,11 @@ public class ScreenGame implements Screen {
             gs.batch.draw(imgSpaceSky, sky[i].x, sky[i].y, sky[i].width, sky[i].height);
         }
         for (int i = 0; i < fragments.size(); i++) {
-            gs.batch.draw(imgFragment[fragments.get(i).type], fragments.get(i).getX(), fragments.get(i).getY(), fragments.get(i).width, fragments.get(i).height);
+            gs.batch.draw(imgFragment[fragments.get(i).type],
+                    fragments.get(i).getX(), fragments.get(i).getY(),
+                    fragments.get(i).width/2, fragments.get(i).height/2,
+                    fragments.get(i).width, fragments.get(i).height,
+                    1, 1, fragments.get(i).angle);
         }
         for (int i = 0; i < enemy.size(); i++) {
             gs.batch.draw(imgEnemy, enemy.get(i).getX(), enemy.get(i).getY(), enemy.get(i).width, enemy.get(i).height);

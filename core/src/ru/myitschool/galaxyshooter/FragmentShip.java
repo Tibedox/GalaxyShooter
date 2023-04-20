@@ -7,14 +7,25 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class FragmentShip extends GalaxyObject{
     int type;
+    float v, a;
+    float speedRotation, angle;
 
     public FragmentShip(float x, float y, float size) {
         super(x, y, 0, 0);
-        width = MathUtils.random(size/10, size/4);
-        height = MathUtils.random(size/10, size/4);
-        vx = MathUtils.random(-5f, 5f);
-        vy = MathUtils.random(-5f, 5f);
+        width = MathUtils.random(size/10, size/3);
+        height = MathUtils.random(size/10, size/3);
+        v = MathUtils.random(0.1f, 5f);
+        a = MathUtils.random(0f, 360f);
+        vx = MathUtils.sin(a)*v;
+        vy = MathUtils.cos(a)*v;
         type = MathUtils.random(0, 3);
+        speedRotation = MathUtils.random(-5f, 5f);
+    }
+
+    @Override
+    void move() {
+        super.move();
+        angle += speedRotation;
     }
 
     boolean outOfScreen() {
