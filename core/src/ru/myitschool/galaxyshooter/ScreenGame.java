@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ public class ScreenGame implements Screen {
     Texture imgShip;
     Texture imgEnemy;
     Texture imgShot;
-    Texture imgFragment;
+    Texture imgAtlasFragments;
+    TextureRegion[] imgFragment = new TextureRegion[4];
     Sound sndShoot;
     Sound sndExposion;
 
@@ -38,7 +40,10 @@ public class ScreenGame implements Screen {
         imgShip = new Texture("ship.png");
         imgEnemy = new Texture("enemy.png");
         imgShot = new Texture("shipshot.png");
-        imgFragment = new Texture("trashenemy.png");
+        imgAtlasFragments = new Texture("atlasfragment.png");
+        for (int i = 0; i < imgFragment.length; i++) {
+            imgFragment[i] = new TextureRegion(imgAtlasFragments, i*200, 0, 200, 200);
+        }
         sndShoot = Gdx.audio.newSound(Gdx.files.internal("shoot2.mp3"));
         sndExposion = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
 
@@ -85,7 +90,7 @@ public class ScreenGame implements Screen {
             for (int j = 0; j < enemy.size(); j++) {
                 if(shots.get(i).overlap(enemy.get(j))) {
                     // взрыв вражеского корабля
-                    for (int k = 0; k < 100; k++) {
+                    for (int k = 0; k < 1400; k++) {
                         fragments.add(new FragmentShip(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width));
                     }
                     shots.remove(i);
@@ -115,7 +120,7 @@ public class ScreenGame implements Screen {
             gs.batch.draw(imgSpaceSky, sky[i].x, sky[i].y, sky[i].width, sky[i].height);
         }
         for (int i = 0; i < fragments.size(); i++) {
-            gs.batch.draw(imgFragment, fragments.get(i).getX(), fragments.get(i).getY(), fragments.get(i).width, fragments.get(i).height);
+            gs.batch.draw(imgFragment[fragments.get(i).type], fragments.get(i).getX(), fragments.get(i).getY(), fragments.get(i).width, fragments.get(i).height);
         }
         for (int i = 0; i < enemy.size(); i++) {
             gs.batch.draw(imgEnemy, enemy.get(i).getX(), enemy.get(i).getY(), enemy.get(i).width, enemy.get(i).height);
