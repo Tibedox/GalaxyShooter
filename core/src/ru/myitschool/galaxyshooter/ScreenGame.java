@@ -39,7 +39,7 @@ public class ScreenGame implements Screen {
         imgEnemy = new Texture("enemy.png");
         imgShot = new Texture("shipshot.png");
         imgFragment = new Texture("trashenemy.png");
-        sndShoot = Gdx.audio.newSound(Gdx.files.internal("shoot.mp3"));
+        sndShoot = Gdx.audio.newSound(Gdx.files.internal("shoot2.mp3"));
         sndExposion = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
 
         sky[0] = new SpaceSky(0);
@@ -49,7 +49,6 @@ public class ScreenGame implements Screen {
 
     @Override
     public void show() {
-        
     }
 
     @Override
@@ -86,10 +85,13 @@ public class ScreenGame implements Screen {
             for (int j = 0; j < enemy.size(); j++) {
                 if(shots.get(i).overlap(enemy.get(j))) {
                     // взрыв вражеского корабля
-                    spawnFragments(enemy.get(i));
+                    for (int k = 0; k < 100; k++) {
+                        fragments.add(new FragmentShip(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width));
+                    }
                     shots.remove(i);
                     enemy.remove(j);
                     if(gs.sound) sndExposion.play();
+                    i--;
                     break;
                 }
             }
@@ -167,12 +169,6 @@ public class ScreenGame implements Screen {
             if(gs.sound) {
                 sndShoot.play();
             }
-        }
-    }
-
-    void spawnFragments(EnemyShip ship) {
-        for (int i = 0; i < 100; i++) {
-            fragments.add(new FragmentShip(ship.x, ship.y, ship.width));
         }
     }
 }
