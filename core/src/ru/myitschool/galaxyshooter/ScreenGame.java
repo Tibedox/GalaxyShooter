@@ -78,6 +78,7 @@ public class ScreenGame implements Screen {
             enemy.get(i).move();
             if(enemy.get(i).outOfScreen()){
                 enemy.remove(i);
+                killShip();
                 i--;
             }
         }
@@ -93,9 +94,7 @@ public class ScreenGame implements Screen {
             for (int j = 0; j < enemy.size(); j++) {
                 if(enemy.get(j).x<SCR_HEIGHT && shots.get(i).overlap(enemy.get(j))) {
                     // взрыв вражеского корабля
-                    for (int k = 0; k < 100; k++) {
-                        fragments.add(new FragmentShip(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width));
-                    }
+                    spawnFragments(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width);
                     shots.remove(i);
                     enemy.remove(j);
                     if(gs.sound) sndExposion.play();
@@ -184,5 +183,15 @@ public class ScreenGame implements Screen {
                 sndShoot.play();
             }
         }
+    }
+
+    void spawnFragments(float x, float y, float shipSize) {
+        for (int i = 0; i < 100; i++) {
+            fragments.add(new FragmentShip(x, y, shipSize));
+        }
+    }
+
+    void killShip() {
+        spawnFragments(ship.x, ship.y, ship.width);
     }
 }
