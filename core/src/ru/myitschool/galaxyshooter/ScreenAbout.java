@@ -27,7 +27,7 @@ public class ScreenAbout implements Screen {
     public ScreenAbout(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
         imgBackGround = new Texture("space02.jpg");
-        btnBack = new TextButton(gs.font, "Back", 230, 100);
+        btnBack = new TextButton(gs.fontLarge, "Back", 230, 100);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ScreenAbout implements Screen {
         gs.batch.setProjectionMatrix(gs.camera.combined);
         gs.batch.begin();
         gs.batch.draw(imgBackGround, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-        gs.font.draw(gs.batch, textAboutGame, 20, SCR_HEIGHT-100);
+        gs.fontLarge.draw(gs.batch, textAboutGame, 20, SCR_HEIGHT-100);
         btnBack.font.draw(gs.batch, btnBack.text, btnBack.x, btnBack.y);
         gs.batch.end();
     }

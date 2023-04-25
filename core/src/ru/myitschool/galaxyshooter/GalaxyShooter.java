@@ -17,7 +17,7 @@ public class GalaxyShooter extends Game {
 	SpriteBatch batch; // ссылка на объект, отвечающий за вывод изображений
 	OrthographicCamera camera; // пересчитывает размеры для различных экранов
 	Vector3 touch; // этот объект хранит координаты касания экрана
-	BitmapFont font; // шрифт
+	BitmapFont fontLarge, fontSmall; // шрифт
 
 	ScreenIntro screenIntro;
 	ScreenGame screenGame;
@@ -52,12 +52,14 @@ public class GalaxyShooter extends Game {
 		parameter.color = Color.ORANGE;
 		parameter.borderWidth = 3;
 		parameter.borderColor = Color.BLACK;
-		font = generator.generateFont(parameter);
+		fontLarge = generator.generateFont(parameter);
+		parameter.size = 30;
+		fontSmall = generator.generateFont(parameter);
 	}
 
 	@Override
 	public void dispose () {
 		batch.dispose();
-		font.dispose();
+		fontLarge.dispose();
 	}
 }

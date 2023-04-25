@@ -17,10 +17,10 @@ public class ScreenIntro implements Screen {
     public ScreenIntro(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
         imgBackGround = new Texture("space00.jpg");
-        btnPlay = new TextButton(gs.font, "Play", 100, 500);
-        btnSettings = new TextButton(gs.font, "Settings", 100, 400);
-        btnAbout = new TextButton(gs.font, "About", 100, 300);
-        btnExit = new TextButton(gs.font, "Exit", 100, 200);
+        btnPlay = new TextButton(gs.fontLarge, "Play", 100, 500);
+        btnSettings = new TextButton(gs.fontLarge, "Settings", 100, 400);
+        btnAbout = new TextButton(gs.fontLarge, "About", 100, 300);
+        btnExit = new TextButton(gs.fontLarge, "Exit", 100, 200);
     }
 
     @Override
@@ -35,6 +35,7 @@ public class ScreenIntro implements Screen {
             gs.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             gs.camera.unproject(gs.touch);
             if(btnPlay.hit(gs.touch.x, gs.touch.y)){
+                sleep(100);
                 gs.setScreen(gs.screenGame);
             }
             if(btnSettings.hit(gs.touch.x, gs.touch.y)){
@@ -86,5 +87,13 @@ public class ScreenIntro implements Screen {
     @Override
     public void dispose() {
         imgBackGround.dispose();
+    }
+
+    void sleep(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (Exception e){
+
+        }
     }
 }

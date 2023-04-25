@@ -14,7 +14,7 @@ public class FragmentShip extends GalaxyObject{
         super(x, y, 0, 0);
         width = MathUtils.random(size/10, size/3);
         height = MathUtils.random(size/10, size/3);
-        v = MathUtils.random(0.1f, 5f);
+        v = MathUtils.random(2f, 5f);
         a = MathUtils.random(0f, 360f);
         vx = MathUtils.sin(a)*v;
         vy = MathUtils.cos(a)*v;

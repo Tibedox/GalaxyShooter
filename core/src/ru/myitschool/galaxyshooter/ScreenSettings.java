@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class ScreenSettings implements Screen {
     GalaxyShooter gs;
@@ -28,11 +27,11 @@ public class ScreenSettings implements Screen {
         gs = galaxyShooter;
         keyboard = new InputKeyboard(SCR_WIDTH, SCR_HEIGHT/2, 10);
         imgBackGround = new Texture("space01.jpg");
-        btnName = new TextButton(gs.font, "Name: "+gs.playerName, 100, 700);
-        btnSound = new TextButton(gs.font, "Sound on", 100, 600);
-        btnMusic = new TextButton(gs.font, "Music on", 100, 500);
-        btnClearTable = new TextButton(gs.font, "Clear records", 100, 400);
-        btnBack = new TextButton(gs.font, "Back", 100, 100);
+        btnName = new TextButton(gs.fontLarge, "Name: "+gs.playerName, 100, 700);
+        btnSound = new TextButton(gs.fontLarge, "Sound on", 100, 600);
+        btnMusic = new TextButton(gs.fontLarge, "Music on", 100, 500);
+        btnClearTable = new TextButton(gs.fontLarge, "Clear records", 100, 400);
+        btnBack = new TextButton(gs.fontLarge, "Back", 100, 100);
         loadSettings();
     }
 

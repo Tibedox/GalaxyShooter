@@ -33,6 +33,8 @@ public class ScreenGame implements Screen {
     long timeEnemySpawn, timeEnemyInterval = 1500;
     long timeShotSpawn, timeShotInterval = 500;
 
+    int kills;
+
     public ScreenGame(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
 
@@ -50,6 +52,7 @@ public class ScreenGame implements Screen {
         sky[0] = new SpaceSky(0);
         sky[1] = new SpaceSky(SCR_HEIGHT);
         ship = new SpaceShip(SCR_WIDTH/2, 100, 100, 100);
+        kills = 0;
     }
 
     @Override
@@ -88,7 +91,7 @@ public class ScreenGame implements Screen {
                 continue;
             }
             for (int j = 0; j < enemy.size(); j++) {
-                if(shots.get(i).overlap(enemy.get(j))) {
+                if(enemy.get(j).x<SCR_HEIGHT && shots.get(i).overlap(enemy.get(j))) {
                     // взрыв вражеского корабля
                     for (int k = 0; k < 100; k++) {
                         fragments.add(new FragmentShip(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width));
@@ -97,6 +100,7 @@ public class ScreenGame implements Screen {
                     enemy.remove(j);
                     if(gs.sound) sndExposion.play();
                     i--;
+                    kills++;
                     break;
                 }
             }
@@ -133,6 +137,7 @@ public class ScreenGame implements Screen {
             gs.batch.draw(imgShot, shots.get(i).getX(), shots.get(i).getY(), shots.get(i).width, shots.get(i).height);
         }
         gs.batch.draw(imgShip, ship.getX(), ship.getY(), ship.width, ship.height);
+        gs.fontSmall.draw(gs.batch, "KILLS: "+kills, 10, SCR_HEIGHT-10);
         gs.batch.end();
     }
 
