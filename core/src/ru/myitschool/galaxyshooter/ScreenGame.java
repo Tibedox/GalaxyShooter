@@ -30,10 +30,14 @@ public class ScreenGame implements Screen {
     ArrayList<ShipShot> shots = new ArrayList<>();
     ArrayList<FragmentShip> fragments = new ArrayList<>();
 
+    public static final int TYPE_ENEMY = 0, TYPE_SHIP = 1;
+
     long timeEnemySpawn, timeEnemyInterval = 1500;
     long timeShotSpawn, timeShotInterval = 500;
+    long timeShipDestory, timeShipAliveInterval = 5000;
 
     int kills;
+    boolean isShipAlive;
 
     public ScreenGame(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
@@ -55,6 +59,7 @@ public class ScreenGame implements Screen {
         sky[1] = new SpaceSky(SCR_HEIGHT);
         ship = new SpaceShip(SCR_WIDTH/2, 100, 100, 100);
         kills = 0;
+        isShipAlive = true;
     }
 
     @Override
@@ -80,12 +85,16 @@ public class ScreenGame implements Screen {
             enemy.get(i).move();
             if(enemy.get(i).outOfScreen()){
                 enemy.remove(i);
-                killShip();
+                if(isShipAlive) {
+                    killShip();
+                }
                 i--;
             }
         }
 
-        spawnShots();
+        if(isShipAlive) {
+            spawnShots();
+        }
         for (int i = 0; i < shots.size(); i++) {
             shots.get(i).move();
             if(shots.get(i).outOfScreen()) {
@@ -96,7 +105,7 @@ public class ScreenGame implements Screen {
             for (int j = 0; j < enemy.size(); j++) {
                 if(enemy.get(j).x<SCR_HEIGHT && shots.get(i).overlap(enemy.get(j))) {
                     // взрыв вражеского корабля
-                    spawnFragments(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width, 0);
+                    spawnFragments(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width, TYPE_ENEMY);
                     shots.remove(i);
                     enemy.remove(j);
                     if(gs.sound) sndExposion.play();
@@ -115,7 +124,14 @@ public class ScreenGame implements Screen {
             }
         }
 
-        ship.move();
+        if(isShipAlive){
+            ship.move();
+        } else {
+            if(timeShipDestory+timeShipAliveInterval<TimeUtils.millis()){
+                isShipAlive = true;
+                ship.x = SCR_WIDTH/2;
+            }
+        }
 
         // вывод изображений
         gs.camera.update();
@@ -137,7 +153,9 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < shots.size(); i++) {
             gs.batch.draw(imgShot, shots.get(i).getX(), shots.get(i).getY(), shots.get(i).width, shots.get(i).height);
         }
-        gs.batch.draw(imgShip, ship.getX(), ship.getY(), ship.width, ship.height);
+        if(isShipAlive){
+            gs.batch.draw(imgShip, ship.getX(), ship.getY(), ship.width, ship.height);
+        }
         gs.fontSmall.draw(gs.batch, "KILLS: "+kills, 10, SCR_HEIGHT-10);
         gs.batch.end();
     }
@@ -194,6 +212,9 @@ public class ScreenGame implements Screen {
     }
 
     void killShip() {
-        spawnFragments(ship.x, ship.y, ship.width, 1);
+        spawnFragments(ship.x, ship.y, ship.width, TYPE_SHIP);
+        if(gs.sound) sndExposion.play();
+        isShipAlive = false;
+        timeShipDestory = TimeUtils.millis();
     }
 }
