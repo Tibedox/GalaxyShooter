@@ -6,11 +6,12 @@ import static ru.myitschool.galaxyshooter.GalaxyShooter.SCR_WIDTH;
 import com.badlogic.gdx.math.MathUtils;
 
 public class FragmentShip extends GalaxyObject{
-    int type;
+    int typeFragment;
+    int typeShip;
     float v, a;
     float speedRotation, angle;
 
-    public FragmentShip(float x, float y, float size) {
+    public FragmentShip(float x, float y, float size, int typeShip) {
         super(x, y, 0, 0);
         width = MathUtils.random(size/10, size/3);
         height = MathUtils.random(size/10, size/3);
@@ -18,7 +19,8 @@ public class FragmentShip extends GalaxyObject{
         a = MathUtils.random(0f, 360f);
         vx = MathUtils.sin(a)*v;
         vy = MathUtils.cos(a)*v;
-        type = MathUtils.random(0, 3);
+        this.typeShip = typeShip;
+        typeFragment = MathUtils.random(0, 3);
         speedRotation = MathUtils.random(-5f, 5f);
     }
 

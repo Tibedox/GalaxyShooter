@@ -20,7 +20,7 @@ public class ScreenGame implements Screen {
     Texture imgEnemy;
     Texture imgShot;
     Texture imgAtlasFragments;
-    TextureRegion[] imgFragment = new TextureRegion[4];
+    TextureRegion[][] imgFragment = new TextureRegion[2][4];
     Sound sndShoot;
     Sound sndExposion;
 
@@ -43,9 +43,11 @@ public class ScreenGame implements Screen {
         imgEnemy = new Texture("enemy.png");
         imgShot = new Texture("shipshot.png");
         imgAtlasFragments = new Texture("atlasfragment.png");
-        for (int i = 0; i < imgFragment.length; i++) {
-            imgFragment[i] = new TextureRegion(imgAtlasFragments, i*200, 0, 200, 200);
+        for (int i = 0; i < imgFragment[0].length; i++) {
+            imgFragment[0][i] = new TextureRegion(imgAtlasFragments, i*200, 0, 200, 200);
+            imgFragment[1][i] = new TextureRegion(imgAtlasFragments, i*200, 200, 200, 200);
         }
+
         sndShoot = Gdx.audio.newSound(Gdx.files.internal("shoot2.mp3"));
         sndExposion = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
 
@@ -94,7 +96,7 @@ public class ScreenGame implements Screen {
             for (int j = 0; j < enemy.size(); j++) {
                 if(enemy.get(j).x<SCR_HEIGHT && shots.get(i).overlap(enemy.get(j))) {
                     // взрыв вражеского корабля
-                    spawnFragments(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width);
+                    spawnFragments(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width, 0);
                     shots.remove(i);
                     enemy.remove(j);
                     if(gs.sound) sndExposion.play();
@@ -123,7 +125,7 @@ public class ScreenGame implements Screen {
             gs.batch.draw(imgSpaceSky, sky[i].x, sky[i].y, sky[i].width, sky[i].height);
         }
         for (int i = 0; i < fragments.size(); i++) {
-            gs.batch.draw(imgFragment[fragments.get(i).type],
+            gs.batch.draw(imgFragment[fragments.get(i).typeShip][fragments.get(i).typeFragment],
                     fragments.get(i).getX(), fragments.get(i).getY(),
                     fragments.get(i).width/2, fragments.get(i).height/2,
                     fragments.get(i).width, fragments.get(i).height,
@@ -185,13 +187,13 @@ public class ScreenGame implements Screen {
         }
     }
 
-    void spawnFragments(float x, float y, float shipSize) {
+    void spawnFragments(float x, float y, float shipSize, int typeShip) {
         for (int i = 0; i < 100; i++) {
-            fragments.add(new FragmentShip(x, y, shipSize));
+            fragments.add(new FragmentShip(x, y, shipSize, typeShip));
         }
     }
 
     void killShip() {
-        spawnFragments(ship.x, ship.y, ship.width);
+        spawnFragments(ship.x, ship.y, ship.width, 1);
     }
 }
