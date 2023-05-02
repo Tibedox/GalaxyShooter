@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class ScreenGame implements Screen {
     GalaxyShooter gs;
 
+    Texture imgCross;
     Texture imgSpaceSky;
     Texture imgShip;
     Texture imgEnemy;
@@ -22,7 +23,9 @@ public class ScreenGame implements Screen {
     Texture imgAtlasFragments;
     TextureRegion[][] imgFragment = new TextureRegion[2][4];
     Sound sndShoot;
-    Sound sndExposion;
+    Sound sndExplosion;
+
+    ImageButton btnExit;
 
     SpaceSky[] sky = new SpaceSky[2];
     SpaceShip ship;
@@ -42,6 +45,7 @@ public class ScreenGame implements Screen {
     public ScreenGame(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
 
+        imgCross = new Texture("cross.png");
         imgSpaceSky = new Texture("stars.png");
         imgShip = new Texture("ship.png");
         imgEnemy = new Texture("enemy.png");
@@ -52,18 +56,20 @@ public class ScreenGame implements Screen {
             imgFragment[1][i] = new TextureRegion(imgAtlasFragments, i*200, 200, 200, 200);
         }
 
+        btnExit = new ImageButton(imgCross, SCR_WIDTH-40, SCR_HEIGHT-40, 30, 30);
+
         sndShoot = Gdx.audio.newSound(Gdx.files.internal("shoot2.mp3"));
-        sndExposion = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
+        sndExplosion = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
 
         sky[0] = new SpaceSky(0);
         sky[1] = new SpaceSky(SCR_HEIGHT);
-        ship = new SpaceShip(SCR_WIDTH/2, 100, 100, 100);
-        kills = 0;
-        isShipAlive = true;
+
+        startGame();
     }
 
     @Override
     public void show() {
+        startGame();
     }
 
     @Override
@@ -73,6 +79,9 @@ public class ScreenGame implements Screen {
             gs.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             gs.camera.unproject(gs.touch);
             ship.vx = (gs.touch.x - ship.x)/50;
+            if(btnExit.hit(gs.touch.x, gs.touch.y)){
+                gs.setScreen(gs.screenIntro);
+            }
         }
 
         // события игры
@@ -108,7 +117,7 @@ public class ScreenGame implements Screen {
                     spawnFragments(enemy.get(j).x, enemy.get(j).y, enemy.get(j).width, TYPE_ENEMY);
                     shots.remove(i);
                     enemy.remove(j);
-                    if(gs.sound) sndExposion.play();
+                    if(gs.sound) sndExplosion.play();
                     i--;
                     kills++;
                     break;
@@ -133,7 +142,7 @@ public class ScreenGame implements Screen {
             }
         }
 
-        // вывод изображений
+        // вывод всех изображений
         gs.camera.update();
         gs.batch.setProjectionMatrix(gs.camera.combined);
         gs.batch.begin();
@@ -157,6 +166,10 @@ public class ScreenGame implements Screen {
             gs.batch.draw(imgShip, ship.getX(), ship.getY(), ship.width, ship.height);
         }
         gs.fontSmall.draw(gs.batch, "KILLS: "+kills, 10, SCR_HEIGHT-10);
+        gs.batch.draw(btnExit.img, btnExit.x, btnExit.y, btnExit.width, btnExit.height);
+        for (int i = 0; i < ship.lives; i++) {
+            gs.batch.draw(imgShip, SCR_WIDTH-40-i*40, 10, 30, 30);
+        }
         gs.batch.end();
     }
 
@@ -213,8 +226,25 @@ public class ScreenGame implements Screen {
 
     void killShip() {
         spawnFragments(ship.x, ship.y, ship.width, TYPE_SHIP);
-        if(gs.sound) sndExposion.play();
+        if(gs.sound) sndExplosion.play();
         isShipAlive = false;
+        ship.lives--;
+        if(ship.lives == 0) {
+            gameOver();
+        }
         timeShipDestory = TimeUtils.millis();
+    }
+
+    void gameOver(){
+
+    }
+
+    void startGame(){
+        fragments.clear();
+        shots.clear();
+        enemy.clear();
+        ship = new SpaceShip(SCR_WIDTH/2, 100, 100, 100);
+        kills = 0;
+        isShipAlive = true;
     }
 }

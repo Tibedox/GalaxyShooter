@@ -3,6 +3,8 @@ package ru.myitschool.galaxyshooter;
 import static ru.myitschool.galaxyshooter.GalaxyShooter.SCR_WIDTH;
 
 public class SpaceShip extends GalaxyObject{
+    int lives = 5;
+
     public SpaceShip(float x, float y, float width, float height) {
         super(x, y, width, height);
     }
