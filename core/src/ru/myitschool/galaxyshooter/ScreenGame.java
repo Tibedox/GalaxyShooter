@@ -260,5 +260,6 @@ public class ScreenGame implements Screen {
         ship = new SpaceShip(SCR_WIDTH/2, 100, 100, 100);
         kills = 0;
         isShipAlive = true;
+        isGameOver = false;
     }
 }
