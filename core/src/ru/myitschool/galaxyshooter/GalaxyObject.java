@@ -1,9 +1,9 @@
 package ru.myitschool.galaxyshooter;
 
 public class GalaxyObject {
-    float x, y;
-    float width, height;
-    float vx, vy;
+    float x, y; // координаты
+    float width, height; // ширина и высота
+    float vx, vy; // скорость (приращение координаты)
 
     public GalaxyObject(float x, float y, float width, float height) {
         this.x = x;
@@ -17,11 +17,11 @@ public class GalaxyObject {
         y += vy;
     }
 
-    float getX() {
+    float getX() { // экранная координата х
         return x - width/2;
     }
 
-    float getY() {
+    float getY() { // экранная координата y
         return y - height/2;
     }
 }

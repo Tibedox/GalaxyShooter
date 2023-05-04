@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ScreenGame implements Screen {
 
     int kills;
     boolean isShipAlive;
+    boolean isGameOver;
 
     public ScreenGame(GalaxyShooter galaxyShooter){
         gs = galaxyShooter;
@@ -84,11 +86,13 @@ public class ScreenGame implements Screen {
             }
         }
 
-        // события игры
+        //*****************************  события игры  *********************************************
+        // движение неба
         for (int i = 0; i < sky.length; i++) {
             sky[i].move();
         }
 
+        // вражеские корабли
         spawnEnemy();
         for (int i = 0; i < enemy.size(); i++) {
             enemy.get(i).move();
@@ -101,6 +105,7 @@ public class ScreenGame implements Screen {
             }
         }
 
+        // выстрелы
         if(isShipAlive) {
             spawnShots();
         }
@@ -125,6 +130,7 @@ public class ScreenGame implements Screen {
             }
         }
 
+        // обломки кораблей
         for (int i = 0; i < fragments.size(); i++) {
             fragments.get(i).move();
             if(fragments.get(i).outOfScreen()){
@@ -133,19 +139,20 @@ public class ScreenGame implements Screen {
             }
         }
 
+        // наш космический корабль
         if(isShipAlive){
             ship.move();
-        } else {
+        } else if(!isGameOver){
             if(timeShipDestory+timeShipAliveInterval<TimeUtils.millis()){
                 isShipAlive = true;
                 ship.x = SCR_WIDTH/2;
             }
         }
 
-        // вывод всех изображений
+        // **********************  вывод всех изображений  *****************************************
         gs.camera.update();
-        gs.batch.setProjectionMatrix(gs.camera.combined);
-        gs.batch.begin();
+        gs.batch.setProjectionMatrix(gs.camera.combined); // пересчёт всех размеров вывода картинок под размеры экрана
+        gs.batch.begin(); // начало вывода изображений
         for (int i = 0; i < sky.length; i++) {
             gs.batch.draw(imgSpaceSky, sky[i].x, sky[i].y, sky[i].width, sky[i].height);
         }
@@ -166,11 +173,17 @@ public class ScreenGame implements Screen {
             gs.batch.draw(imgShip, ship.getX(), ship.getY(), ship.width, ship.height);
         }
         gs.fontSmall.draw(gs.batch, "KILLS: "+kills, 10, SCR_HEIGHT-10);
+        // кнопка дла выхода - крестик
         gs.batch.draw(btnExit.img, btnExit.x, btnExit.y, btnExit.width, btnExit.height);
+        // жизни - маленькие самолётики в правом нижнем углу
         for (int i = 0; i < ship.lives; i++) {
             gs.batch.draw(imgShip, SCR_WIDTH-40-i*40, 10, 30, 30);
         }
-        gs.batch.end();
+        // вывод GameOver
+        if(isGameOver) {
+            gs.fontLarge.draw(gs.batch, "GAME OVER", 0, SCR_HEIGHT / 2, SCR_WIDTH, Align.center, true);
+        }
+        gs.batch.end(); // завершение вывода изображений
     }
 
     @Override
@@ -224,19 +237,20 @@ public class ScreenGame implements Screen {
         }
     }
 
+    // гибель нашего корабля
     void killShip() {
         spawnFragments(ship.x, ship.y, ship.width, TYPE_SHIP);
         if(gs.sound) sndExplosion.play();
         isShipAlive = false;
+        timeShipDestory = TimeUtils.millis();
         ship.lives--;
         if(ship.lives == 0) {
             gameOver();
         }
-        timeShipDestory = TimeUtils.millis();
     }
 
     void gameOver(){
-
+        isGameOver = true;
     }
 
     void startGame(){

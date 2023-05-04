@@ -3,16 +3,16 @@ package ru.myitschool.galaxyshooter;
 import static ru.myitschool.galaxyshooter.GalaxyShooter.SCR_WIDTH;
 
 public class SpaceShip extends GalaxyObject{
-    int lives = 5;
+    int lives = 1; // количество жизней
 
     public SpaceShip(float x, float y, float width, float height) {
-        super(x, y, width, height);
+        super(x, y, width, height); // передаём параметры в родительский класс
     }
 
     @Override
     void move() {
-        super.move();
-        outOfScreen();
+        super.move(); // вызываем move родителя
+        outOfScreen(); // проверка на вылет за пределы экрана
     }
 
     void outOfScreen() {
